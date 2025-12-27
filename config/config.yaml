@@ -1,0 +1,88 @@
+# Credit Risk ML Pipeline Configuration
+
+project:
+  name: credit_risk_pipeline
+  version: "1.0.0"
+
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  feature_data: "data/features"
+  models: "models"
+  feature_store: "feature_store"
+
+data:
+  train_file: "application_train.csv"
+  test_file: "application_test.csv"
+  bureau_file: "bureau.csv"
+  bureau_balance_file: "bureau_balance.csv"
+  previous_application_file: "previous_application.csv"
+  pos_cash_file: "POS_CASH_balance.csv"
+  installments_file: "installments_payments.csv"
+  credit_card_file: "credit_card_balance.csv"
+
+features:
+  target_column: "TARGET"
+  id_column: "SK_ID_CURR"
+
+  # Numeric features to keep from raw data
+  numeric_features:
+    - "AMT_INCOME_TOTAL"
+    - "AMT_CREDIT"
+    - "AMT_ANNUITY"
+    - "AMT_GOODS_PRICE"
+    - "DAYS_BIRTH"
+    - "DAYS_EMPLOYED"
+    - "DAYS_REGISTRATION"
+    - "DAYS_ID_PUBLISH"
+    - "CNT_FAM_MEMBERS"
+    - "REGION_RATING_CLIENT"
+    - "EXT_SOURCE_1"
+    - "EXT_SOURCE_2"
+    - "EXT_SOURCE_3"
+
+  # Categorical features to encode
+  categorical_features:
+    - "NAME_CONTRACT_TYPE"
+    - "CODE_GENDER"
+    - "FLAG_OWN_CAR"
+    - "FLAG_OWN_REALTY"
+    - "NAME_INCOME_TYPE"
+    - "NAME_EDUCATION_TYPE"
+    - "NAME_FAMILY_STATUS"
+    - "NAME_HOUSING_TYPE"
+    - "OCCUPATION_TYPE"
+
+model:
+  algorithm: "random_forest"
+  test_size: 0.2
+  random_state: 42
+
+  # Random Forest parameters
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    min_samples_leaf: 2
+    class_weight: "balanced"
+    n_jobs: -1
+
+  # XGBoost parameters
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    scale_pos_weight: 10
+    n_jobs: -1
+
+feast:
+  project_name: "credit_risk"
+  entity_name: "customer"
+  feature_view_name: "credit_features"
+  ttl_days: 365
+
+airflow:
+  dag_id: "credit_risk_pipeline"
+  schedule_interval: "@daily"
+  start_date: "2024-01-01"
+  catchup: false
