@@ -66,7 +66,7 @@ Ml_pipeline/
 1. Clone the repository and navigate to the project directory:
 
 ```bash
-cd Ml_pipeline
+cd Credit-Risk-ML-Pipeline
 ```
 
 2. Create a virtual environment:
